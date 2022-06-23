@@ -20,8 +20,19 @@ WHERE n.name CONTAINS 'obama'
 RETURN DISTINCT n.name
 
 // ***PROBLEM: WHERE WAS BARACK OBAMA BORN?***
+MATCH (n:Node {name: 'oh bah mə'})-[:bear]->(m) RETURN n,m
+
+
+// note - spits back Illinois and Honolulu ; bear in lemmas NLP = born
 
 // ***PROBLEM: HOW MANY DUPLICATES ARE THERE?***
+
+// to look at duplicates
+MATCH (n:Node)
+With n.name AS name, n.node_labels AS labels, COLLECT(n) AS nodes
+WHERE SIZE(nodes)>1
+RETURN [n in nodes | n.name} AS nmes, [n in nodes | n.nodes_labels] AS labels, SIZE(nodes)
+ORDER BY SIZE(nodes) DESC
 
 // Drop duplicates
 MATCH (n:Node) 
@@ -75,7 +86,7 @@ RETURN node
 MATCH (u:Unknown) RETURN u.name, u.node_labels
 
 // Create an in-memory, undirected graph of all nodes
-CALL gds.graph.create(
+CALL gds.graph.project(
 	'all_nodes',
     {
     	AllNodes: {label: 'Node', 
