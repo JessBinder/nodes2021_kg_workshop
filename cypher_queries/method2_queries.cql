@@ -22,7 +22,8 @@ CALL apoc.create.addLabels(n, n.type_ls)
 YIELD node RETURN node
 
 // ***PROBLEM: WHERE WAS BARACK OBAMA BORN?***
-
+MATCH (n:Node {name: 'Barack Obama'})-[:place_of_birth]->(place:Node) RETURN place.name
+		    
 // Find a lot of places
 MATCH (n)
 WHERE ANY (x in n.type WHERE x IN 
